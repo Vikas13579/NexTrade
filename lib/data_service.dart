@@ -1,0 +1,443 @@
+// lib/data/datasources/mock_data_service.dart
+import 'dart:math';
+import 'model.dart';
+
+class MockDataService {
+  static final Random _random = Random();
+
+  static List<StockModel> getMockStocks() {
+    return [
+      StockModel(
+        symbol: 'RELIANCE',
+        name: 'Reliance Industries Ltd',
+        exchange: 'NSE',
+        currentPrice: 2847.65,
+        previousClose: 2810.20,
+        openPrice: 2820.00,
+        highPrice: 2865.90,
+        lowPrice: 2810.00,
+        volume: 12456789,
+        marketCap: 19234567890000,
+        sector: 'Energy',
+        sparklineData: _generateSparkline(2800, 20),
+        weekHigh52: 3024.90,
+        weekLow52: 2220.30,
+        peRatio: 28.5,
+        dividendYield: 0.35,
+        isWatchlisted: true,
+      ),
+      StockModel(
+        symbol: 'TCS',
+        name: 'Tata Consultancy Services',
+        exchange: 'NSE',
+        currentPrice: 3658.90,
+        previousClose: 3700.15,
+        openPrice: 3695.00,
+        highPrice: 3720.00,
+        lowPrice: 3640.00,
+        volume: 4567890,
+        marketCap: 13345678900000,
+        sector: 'IT',
+        sparklineData: _generateSparkline(3700, 15),
+        weekHigh52: 4243.55,
+        weekLow52: 3058.00,
+        peRatio: 31.2,
+        dividendYield: 1.37,
+        isWatchlisted: true,
+      ),
+      StockModel(
+        symbol: 'HDFCBANK',
+        name: 'HDFC Bank Limited',
+        exchange: 'NSE',
+        currentPrice: 1687.40,
+        previousClose: 1655.80,
+        openPrice: 1660.00,
+        highPrice: 1695.00,
+        lowPrice: 1652.00,
+        volume: 8901234,
+        marketCap: 12567890100000,
+        sector: 'Banking',
+        sparklineData: _generateSparkline(1660, 10),
+        weekHigh52: 1880.00,
+        weekLow52: 1363.55,
+        peRatio: 19.8,
+        dividendYield: 1.21,
+        isWatchlisted: false,
+      ),
+      StockModel(
+        symbol: 'INFY',
+        name: 'Infosys Limited',
+        exchange: 'NSE',
+        currentPrice: 1456.25,
+        previousClose: 1432.80,
+        openPrice: 1440.00,
+        highPrice: 1465.00,
+        lowPrice: 1428.00,
+        volume: 6234567,
+        marketCap: 6078901200000,
+        sector: 'IT',
+        sparklineData: _generateSparkline(1440, 12),
+        weekHigh52: 1892.75,
+        weekLow52: 1355.00,
+        peRatio: 24.6,
+        dividendYield: 2.46,
+        isWatchlisted: false,
+      ),
+      StockModel(
+        symbol: 'ICICIBANK',
+        name: 'ICICI Bank Limited',
+        exchange: 'NSE',
+        currentPrice: 1089.55,
+        previousClose: 1102.30,
+        openPrice: 1100.00,
+        highPrice: 1115.00,
+        lowPrice: 1082.00,
+        volume: 9345678,
+        marketCap: 7678901230000,
+        sector: 'Banking',
+        sparklineData: _generateSparkline(1100, 8),
+        weekHigh52: 1277.00,
+        weekLow52: 899.05,
+        peRatio: 18.4,
+        dividendYield: 0.92,
+        isWatchlisted: true,
+      ),
+      StockModel(
+        symbol: 'WIPRO',
+        name: 'Wipro Limited',
+        exchange: 'NSE',
+        currentPrice: 467.80,
+        previousClose: 455.60,
+        openPrice: 460.00,
+        highPrice: 472.00,
+        lowPrice: 453.00,
+        volume: 5123456,
+        marketCap: 2456789010000,
+        sector: 'IT',
+        sparklineData: _generateSparkline(460, 8),
+        weekHigh52: 557.20,
+        weekLow52: 385.50,
+        peRatio: 21.3,
+        dividendYield: 0.43,
+        isWatchlisted: false,
+      ),
+      StockModel(
+        symbol: 'SBIN',
+        name: 'State Bank of India',
+        exchange: 'NSE',
+        currentPrice: 812.35,
+        previousClose: 798.90,
+        openPrice: 802.00,
+        highPrice: 820.00,
+        lowPrice: 795.00,
+        volume: 18234567,
+        marketCap: 7234567890000,
+        sector: 'Banking',
+        sparklineData: _generateSparkline(800, 15),
+        weekHigh52: 912.00,
+        weekLow52: 543.20,
+        peRatio: 10.2,
+        dividendYield: 1.48,
+        isWatchlisted: false,
+      ),
+      StockModel(
+        symbol: 'BAJFINANCE',
+        name: 'Bajaj Finance Limited',
+        exchange: 'NSE',
+        currentPrice: 7234.60,
+        previousClose: 7189.40,
+        openPrice: 7200.00,
+        highPrice: 7280.00,
+        lowPrice: 7150.00,
+        volume: 1234567,
+        marketCap: 4365678900000,
+        sector: 'Finance',
+        sparklineData: _generateSparkline(7200, 20),
+        weekHigh52: 8192.00,
+        weekLow52: 5845.00,
+        peRatio: 36.7,
+        dividendYield: 0.28,
+        isWatchlisted: true,
+      ),
+      StockModel(
+        symbol: 'TATAMOTORS',
+        name: 'Tata Motors Limited',
+        exchange: 'NSE',
+        currentPrice: 798.45,
+        previousClose: 820.70,
+        openPrice: 818.00,
+        highPrice: 825.00,
+        lowPrice: 792.00,
+        volume: 15678901,
+        marketCap: 2678901230000,
+        sector: 'Automobiles',
+        sparklineData: _generateSparkline(810, 18),
+        weekHigh52: 1179.00,
+        weekLow52: 607.00,
+        peRatio: 8.9,
+        dividendYield: 0.0,
+        isWatchlisted: false,
+      ),
+      StockModel(
+        symbol: 'MARUTI',
+        name: 'Maruti Suzuki India Ltd',
+        exchange: 'NSE',
+        currentPrice: 10456.75,
+        previousClose: 10312.40,
+        openPrice: 10350.00,
+        highPrice: 10510.00,
+        lowPrice: 10280.00,
+        volume: 789012,
+        marketCap: 3156789010000,
+        sector: 'Automobiles',
+        sparklineData: _generateSparkline(10350, 25),
+        weekHigh52: 13780.00,
+        weekLow52: 9202.35,
+        peRatio: 28.9,
+        dividendYield: 1.15,
+        isWatchlisted: false,
+      ),
+      StockModel(
+        symbol: 'SUNPHARMA',
+        name: 'Sun Pharmaceutical Ind.',
+        exchange: 'NSE',
+        currentPrice: 1689.30,
+        previousClose: 1656.80,
+        openPrice: 1665.00,
+        highPrice: 1700.00,
+        lowPrice: 1650.00,
+        volume: 2345678,
+        marketCap: 4056789010000,
+        sector: 'Pharma',
+        sparklineData: _generateSparkline(1665, 12),
+        weekHigh52: 1960.35,
+        weekLow52: 1129.60,
+        peRatio: 33.2,
+        dividendYield: 0.59,
+        isWatchlisted: true,
+      ),
+      StockModel(
+        symbol: 'ASIANPAINT',
+        name: 'Asian Paints Limited',
+        exchange: 'NSE',
+        currentPrice: 2987.45,
+        previousClose: 3045.20,
+        openPrice: 3040.00,
+        highPrice: 3060.00,
+        lowPrice: 2975.00,
+        volume: 1023456,
+        marketCap: 2856789010000,
+        sector: 'Consumer',
+        sparklineData: _generateSparkline(3040, 14),
+        weekHigh52: 3868.25,
+        weekLow52: 2523.60,
+        peRatio: 52.3,
+        dividendYield: 0.84,
+        isWatchlisted: false,
+      ),
+    ];
+  }
+
+  static List<double> _generateSparkline(double base, double volatility) {
+    List<double> data = [];
+    double current = base;
+    for (int i = 0; i < 20; i++) {
+      current += (_random.nextDouble() - 0.5) * volatility;
+      data.add(current);
+    }
+    return data;
+  }
+
+  static List<HoldingModel> getMockHoldings() {
+    return [
+      HoldingModel(
+        symbol: 'RELIANCE',
+        name: 'Reliance Industries Ltd',
+        quantity: 10,
+        averagePrice: 2650.00,
+        currentPrice: 2847.65,
+        sector: 'Energy',
+      ),
+      HoldingModel(
+        symbol: 'TCS',
+        name: 'Tata Consultancy Services',
+        quantity: 5,
+        averagePrice: 3900.00,
+        currentPrice: 3658.90,
+        sector: 'IT',
+      ),
+      HoldingModel(
+        symbol: 'ICICIBANK',
+        name: 'ICICI Bank Limited',
+        quantity: 50,
+        averagePrice: 950.00,
+        currentPrice: 1089.55,
+        sector: 'Banking',
+      ),
+      HoldingModel(
+        symbol: 'BAJFINANCE',
+        name: 'Bajaj Finance Limited',
+        quantity: 3,
+        averagePrice: 6800.00,
+        currentPrice: 7234.60,
+        sector: 'Finance',
+      ),
+      HoldingModel(
+        symbol: 'SUNPHARMA',
+        name: 'Sun Pharmaceutical Ind.',
+        quantity: 20,
+        averagePrice: 1800.00,
+        currentPrice: 1689.30,
+        sector: 'Pharma',
+      ),
+    ];
+  }
+
+  static List<OrderModel> getMockOrders() {
+    return [
+      OrderModel(
+        id: 'ORD001',
+        symbol: 'RELIANCE',
+        name: 'Reliance Industries Ltd',
+        orderType: 'BUY',
+        productType: 'CNC',
+        priceType: 'MARKET',
+        quantity: 10,
+        price: 2847.65,
+        status: 'EXECUTED',
+        createdAt: DateTime.now().subtract(const Duration(hours: 2)),
+        executedAt: DateTime.now().subtract(const Duration(hours: 2)),
+        executedPrice: 2847.65,
+      ),
+      OrderModel(
+        id: 'ORD002',
+        symbol: 'TCS',
+        name: 'Tata Consultancy Services',
+        orderType: 'SELL',
+        productType: 'CNC',
+        priceType: 'LIMIT',
+        quantity: 5,
+        price: 3800.00,
+        status: 'PENDING',
+        createdAt: DateTime.now().subtract(const Duration(hours: 5)),
+      ),
+      OrderModel(
+        id: 'ORD003',
+        symbol: 'INFY',
+        name: 'Infosys Limited',
+        orderType: 'BUY',
+        productType: 'MIS',
+        priceType: 'MARKET',
+        quantity: 20,
+        price: 1456.25,
+        status: 'EXECUTED',
+        createdAt: DateTime.now().subtract(const Duration(days: 1)),
+        executedAt: DateTime.now().subtract(const Duration(days: 1)),
+        executedPrice: 1460.00,
+      ),
+      OrderModel(
+        id: 'ORD004',
+        symbol: 'HDFCBANK',
+        name: 'HDFC Bank Limited',
+        orderType: 'BUY',
+        productType: 'CNC',
+        priceType: 'LIMIT',
+        quantity: 15,
+        price: 1650.00,
+        status: 'CANCELLED',
+        createdAt: DateTime.now().subtract(const Duration(days: 2)),
+      ),
+    ];
+  }
+
+  static List<TransactionModel> getMockTransactions() {
+    return [
+      TransactionModel(
+        id: 'TXN001',
+        type: 'CREDIT',
+        amount: 50000,
+        description: 'Fund Added via UPI',
+        date: DateTime.now().subtract(const Duration(hours: 3)),
+      ),
+      TransactionModel(
+        id: 'TXN002',
+        type: 'BUY',
+        amount: 28476.50,
+        description: 'Bought 10 RELIANCE @ ₹2847.65',
+        date: DateTime.now().subtract(const Duration(hours: 2)),
+        stockSymbol: 'RELIANCE',
+      ),
+      TransactionModel(
+        id: 'TXN003',
+        type: 'SELL',
+        amount: 14562.50,
+        description: 'Sold 10 INFY @ ₹1456.25',
+        date: DateTime.now().subtract(const Duration(days: 1)),
+        stockSymbol: 'INFY',
+      ),
+      TransactionModel(
+        id: 'TXN004',
+        type: 'DIVIDEND',
+        amount: 1250.00,
+        description: 'Dividend - TCS Q2 FY24',
+        date: DateTime.now().subtract(const Duration(days: 5)),
+        stockSymbol: 'TCS',
+      ),
+      TransactionModel(
+        id: 'TXN005',
+        type: 'DEBIT',
+        amount: 15000,
+        description: 'Withdrawal to Bank Account',
+        date: DateTime.now().subtract(const Duration(days: 7)),
+      ),
+    ];
+  }
+
+  static List<Map<String, dynamic>> getMarketIndices() {
+    return [
+      {
+        'name': 'NIFTY 50',
+        'value': 22456.80,
+        'change': 234.55,
+        'changePercent': 1.06,
+        'isGainer': true,
+      },
+      {
+        'name': 'SENSEX',
+        'value': 73847.15,
+        'change': 756.30,
+        'changePercent': 1.03,
+        'isGainer': true,
+      },
+      {
+        'name': 'NIFTY BANK',
+        'value': 47823.40,
+        'change': -123.65,
+        'changePercent': -0.26,
+        'isGainer': false,
+      },
+      {
+        'name': 'NIFTY IT',
+        'value': 35219.75,
+        'change': 445.20,
+        'changePercent': 1.28,
+        'isGainer': true,
+      },
+    ];
+  }
+
+  // Generate OHLC candle data for charts
+  static List<Map<String, double>> generateCandleData(double base, int days) {
+    List<Map<String, double>> candles = [];
+    double current = base;
+    for (int i = 0; i < days; i++) {
+      double open = current;
+      double close = open + (_random.nextDouble() - 0.48) * (base * 0.02);
+      double high = [open, close].reduce(max) + _random.nextDouble() * (base * 0.005);
+      double low = [open, close].reduce(min) - _random.nextDouble() * (base * 0.005);
+      candles.add({'open': open, 'high': high, 'low': low, 'close': close});
+      current = close;
+    }
+    return candles;
+  }
+}
