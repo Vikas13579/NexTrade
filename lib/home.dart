@@ -7,11 +7,13 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:nextrade/stock_detail.dart';
 import 'package:nextrade/watchlist_screen.dart';
 import 'package:nextrade/widgets.dart';
+import 'package:nextrade/market_simulator.dart';
 
 import 'app_theme.dart';
 import 'data_service.dart';
 import 'hive_service.dart';
 import 'market_screen.dart';
+import 'market_store.dart';
 import 'model.dart';
 import 'orders_screen.dart';
 
@@ -24,9 +26,25 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool _showBalance = true;
-  final List<StockModel> _stocks = MockDataService.getMockStocks();
+  final List<StockModel> _stocks = MarketStore.stocks;
+  // final List<StockModel> _stocks = MockDataService.getMockStocks();
   final List<Map<String, dynamic>> _indices =
       MockDataService.getMarketIndices();
+
+  @override
+  void initState() {
+    super.initState();
+
+    MarketSimulator.start(() {
+      if (mounted) setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    MarketSimulator.stop(); // VERY IMPORTANT
+    super.dispose();
+  }
 
   // ── navigation helpers ────────────────────────────────────────
   void _goToStock(StockModel stock) {
@@ -386,20 +404,23 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildMiniChart() {
-    final spots = [
-      const FlSpot(0, 4.2),
-      const FlSpot(1, 4.35),
-      const FlSpot(2, 4.1),
-      const FlSpot(3, 4.45),
-      const FlSpot(4, 4.3),
-      const FlSpot(5, 4.55),
-      const FlSpot(6, 4.48),
-      const FlSpot(7, 4.6),
-      const FlSpot(8, 4.52),
-      const FlSpot(9, 4.73),
-      const FlSpot(10, 4.65),
-      const FlSpot(11, 4.87),
-    ];
+    final holdings = HiveService.holdingsBox.values.toList();
+
+    if (holdings.isEmpty) {
+      return const SizedBox(height: 56);
+    }
+
+    final stock = _stocks.firstWhere(
+          (s) => s.symbol == holdings.first.symbol,
+      orElse: () => _stocks.first,
+    );
+
+    final spots = stock.sparklineData
+        .asMap()
+        .entries
+        .map((e) => FlSpot(e.key.toDouble(), e.value))
+        .toList();
+
     return SizedBox(
       height: 56,
       child: LineChart(
@@ -421,8 +442,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     NexTradeColors.primary.withOpacity(0.18),
                     NexTradeColors.primary.withOpacity(0),
                   ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
                 ),
               ),
             ),
@@ -432,6 +451,54 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  // Widget _buildMiniChart() {
+  //   final spots = [
+  //     const FlSpot(0, 4.2),
+  //     const FlSpot(1, 4.35),
+  //     const FlSpot(2, 4.1),
+  //     const FlSpot(3, 4.45),
+  //     const FlSpot(4, 4.3),
+  //     const FlSpot(5, 4.55),
+  //     const FlSpot(6, 4.48),
+  //     const FlSpot(7, 4.6),
+  //     const FlSpot(8, 4.52),
+  //     const FlSpot(9, 4.73),
+  //     const FlSpot(10, 4.65),
+  //     const FlSpot(11, 4.87),
+  //   ];
+  //   return SizedBox(
+  //     height: 56,
+  //     child: LineChart(
+  //       LineChartData(
+  //         gridData: const FlGridData(show: false),
+  //         titlesData: const FlTitlesData(show: false),
+  //         borderData: FlBorderData(show: false),
+  //         lineBarsData: [
+  //           LineChartBarData(
+  //             spots: spots,
+  //             isCurved: true,
+  //             gradient: NexTradeColors.primaryGradient,
+  //             barWidth: 2,
+  //             dotData: const FlDotData(show: false),
+  //             belowBarData: BarAreaData(
+  //               show: true,
+  //               gradient: LinearGradient(
+  //                 colors: [
+  //                   NexTradeColors.primary.withOpacity(0.18),
+  //                   NexTradeColors.primary.withOpacity(0),
+  //                 ],
+  //                 begin: Alignment.topCenter,
+  //                 end: Alignment.bottomCenter,
+  //               ),
+  //             ),
+  //           ),
+  //         ],
+  //         lineTouchData: const LineTouchData(enabled: false),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildStatItem(String label, String value, Color? valueColor) {
     return Column(
@@ -626,7 +693,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // ── Top Gainers ───────────────────────────────────────────────
   Widget _buildTopGainers() {
-    final gainers = _stocks.where((s) => s.isGainer).take(5).toList();
+
+    final gainers = _stocks
+        .where((s) => s.isGainer)
+        .toList()
+      ..sort((a, b) => b.changePercent.compareTo(a.changePercent));
+
+    // final gainers = _stocks.where((s) => s.isGainer).take(5).toList();
     return SizedBox(
       height: 140,
       child: ListView.separated(
@@ -729,7 +802,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // ── Top Losers ────────────────────────────────────────────────
   Widget _buildTopLosers() {
-    final losers = _stocks.where((s) => !s.isGainer).take(5).toList();
+    final losers = _stocks
+        .where((s) => !s.isGainer)
+        .toList()
+      ..sort((a, b) => a.changePercent.compareTo(b.changePercent));
+
+    // final losers = _stocks.where((s) => !s.isGainer).take(5).toList();
     return SizedBox(
       height: 140,
       child: ListView.separated(
@@ -1215,7 +1293,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final _ctrl = TextEditingController();
-  final List<StockModel> _all = MockDataService.getMockStocks();
+  final List<StockModel> _stocks = MarketStore.stocks;
   List<StockModel> _results = [];
   bool _hasSearched = false;
 
@@ -1225,7 +1303,7 @@ class _SearchScreenState extends State<SearchScreen> {
   void _search(String q) {
     setState(() {
       _hasSearched = q.isNotEmpty;
-      _results = _all
+      _results = _stocks
           .where(
             (s) =>
                 s.symbol.toLowerCase().contains(q.toLowerCase()) ||
@@ -1417,9 +1495,9 @@ class _SearchScreenState extends State<SearchScreen> {
           spacing: 8,
           runSpacing: 8,
           children: items.map((sym) {
-            final stock = _all.firstWhere(
+            final stock = _stocks.firstWhere(
               (s) => s.symbol == sym,
-              orElse: () => _all.first,
+              orElse: () => _stocks.first,
             );
             return GestureDetector(
               onTap: () => Navigator.push(
